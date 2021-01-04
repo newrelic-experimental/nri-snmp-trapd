@@ -1,0 +1,54 @@
+# This file configures the New Relic SNMP trap daemon integration.
+
+collect:
+
+  # ============================== ACCOUNT ID ========================================
+  # You must specify the account id associated with your New Relic
+  # account. For example, if your account id is 12345 use this:
+  # account_id: '12345'
+  # The key binds your data to your account in the New Relic service.
+  account_id: '<% = account_id>'
+
+  # ============================== INSIGHTS INSERT KEY ===============================
+  # You must specify the insert key associated with your New Relic account. 
+  # The key allows data to be inserted to your account in the New Relic service.
+  insert_key: '<% = insights_insert_key>'
+
+  # INSIGHTS HTTP CLIENT PROXY
+  # Certain sites have very restrictive egress firewalls and require you to use a proxy in order to communicate with the outside world.
+  # If this applies to your site, you will need to set this value.
+  #http_proxy_host: 127.0.0.1
+  #http_proxy_port: 5443
+
+  # DEFAULT INSIGHTS EVENT TYPE
+  # Override this default value for specific traps (per trap_oid) in the traps.yml configuration file
+  event_type: SNMPTrapSample
+
+  # DEFAULT DEVICE
+  # Override this default value for specific traps (per trap_oid) in the traps.yml configuration file
+  snmp_device: NR-SNMP-MIB
+
+  # Do not report Traps for OIDs not declared in traps.yml
+  drop_undeclared_traps: true
+
+  # ============================== TRAPD LISTENER CONFIG =================================
+  # You must specify host and port to start the SNMP trap listener. 
+  # Use 0.0.0.0 for snmp_host to bind to all available interfaces
+  
+  snmp_host: 0.0.0.0
+  snmp_port: 162
+  community: public
+
+  # comma separated list of trap definition files
+  trap_definition_files: traps.yml
+
+
+  
+
+
+
+
+
+
+ 
+ 

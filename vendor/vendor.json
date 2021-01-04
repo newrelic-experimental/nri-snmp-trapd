@@ -1,0 +1,49 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "eLPaIcJ9ejN/axz7ta21YqjQGdU=",
+			"path": "github.com/newrelic/go-insights/client",
+			"revision": "eda39d32087548564ab823c7054e337d4d3b3c86",
+			"revisionTime": "2020-08-03T17:24:51Z"
+		},
+		{
+			"checksumSHA1": "dCR2jZxEprfepf/hWxbbrQXa1GE=",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "cd4bf4ef8de16b243cce0e062742feb34128648b",
+			"revisionTime": "2020-12-17T16:18:52Z"
+		},
+		{
+			"checksumSHA1": "p1pT4cUpK1KCFYiPODRjTZuwiXg=",
+			"path": "github.com/soniah/gosnmp",
+			"revision": "8d442760d54593e76f748d36c941a98128dc7fdc",
+			"revisionTime": "2021-01-04T14:29:16Z"
+		},
+		{
+			"checksumSHA1": "Ld0iviZSRGAKK6WSoti+3++1RmY=",
+			"path": "golang.org/x/sys/internal/unsafeheader",
+			"revision": "2d18734c6014bdfc4d7fd7cfc8e0608c9684967b",
+			"revisionTime": "2020-12-31T18:09:48Z"
+		},
+		{
+			"checksumSHA1": "bhFGJex1BuSYxynnLJZgqpSrn7I=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "2d18734c6014bdfc4d7fd7cfc8e0608c9684967b",
+			"revisionTime": "2020-12-31T18:09:48Z"
+		},
+		{
+			"checksumSHA1": "cfjnoz++A5+xnWmkO7RKB1g0RcM=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "2d18734c6014bdfc4d7fd7cfc8e0608c9684967b",
+			"revisionTime": "2020-12-31T18:09:48Z"
+		},
+		{
+			"checksumSHA1": "RqcbcMbbS5iVjpckNxDc30/WYSE=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "7649d4548cb53a614db133b2a8ac1f31859dda8c",
+			"revisionTime": "2020-11-17T15:46:20Z"
+		}
+	],
+	"rootPath": "github.com/newrelic-experimental/nri-snmp-trapd"
+}
