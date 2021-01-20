@@ -1,41 +1,64 @@
+
 [![New Relic Experimental header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Experimental.png)](https://opensource.newrelic.com/oss-category/#new-relic-experimental)
 
-# nri-snmp-trapd
+# New Relic integration for SNMP traps
 
->[Brief description - what is the project and value does it provide? How often should users expect to get releases? How is versioning set up? Where does this project want to go?]
+New Relic Integration for SNMP Traps is a service that listens for SNMP traps and forwards them to New Relic
 
 ## Installation
 
-> [Include a step-by-step procedure on how to get your code installed. Be sure to include any third-party dependencies that need to be installed separately]
+* Copy config.yml.sample to config.yml and edit it to update the following properties
+	* account_id
+	* insert_key
+	* http_proxy_host (uncomment and specify if using HTTP proxy)
+	* http_proxy_port (uncomment and specify if using HTTP proxy)
+	* event_type (default NRQL event_type, can be overriden in traps.yml)
+	* snmp_device (default  device name for use in NRQL, can be overriden in traps.yml)
+	* snmp_host (hostname to use by this service listener, typically just localhost)
+	* snmp_port (port on which this service should start and listen for traps)
+	* community (SNMP version 2 community string)
+	* v3 (SNMP version, default: false)		
+	* trap_definition_files (one or more comma separated list of traps.yml files)
+If v3 is true, SNMP v3 connection is attempted and it requires the following additional properties
+	* username (the security name that identifies the SNMPv3 user)
+	* auth_protocol (the algorithm used for SNMPv3 authentication (SHA or MD5))
+	* auth_passphrase (the password used to generate the key used for SNMPv3 authentication)
+	* priv_protocol (the algorithm used for SNMPv3 message integrity)
+	* priv_passphrase (the password used to generate the key used to verify SNMPv3 message integrity (AES or DES))
+
+* Copy traps.yml.sample to traps.yml and enter or one or more trap definitions in the **traps** section. Each trap definition has the following properties
+	* name (any descriptive name for this trap type)
+	* type (must be "trap")
+	* event_type (NRQL event type)
+	* trap_oid (a unique object identifier (OID) number defined for this trap type as specified in the MIB)
+	* metrics (a list of attribute OIDs to collect for this trap type as specified in the MIB)
+		* metric_name
+		* oid
+
 
 ## Getting Started
 
->[Simple steps to start working with the software similar to a "Hello World"]
+* Run the service executable from the command line to start this New Relic integration as a SNMP trapd listener
 
-## Usage
+```
+nri-trapd -config_file {path-to-config.yml}
+```
 
->[**Optional** - Include more thorough instructions on how to use the software. This section might not be needed if the Getting Started section is enough. Remove this section if it's not needed.]
+For troubleshooting also specify the verbose flag
+
+```
+nri-trapd -config_file {path-to-config.yml} -verbose
+```
 
 ## Building
 
->[**Optional** - Include this section if users will need to follow specific instructions to build the software from source. Be sure to include any third party build dependencies that need to be installed separately. Remove this section if it's not needed.]
 
-## Testing
-
->[**Optional** - Include instructions on how to run tests if we include tests with the codebase. Remove this section if it's not needed.]
 
 ## Support
 
 New Relic has open-sourced this project. This project is provided AS-IS WITHOUT WARRANTY OR DEDICATED SUPPORT. Issues and contributions should be reported to the project here on GitHub.
 
->[Choose 1 of the 2 options below for Support details, and remove the other one.]
-
->[Option 1 - no specific thread in Community]
->We encourage you to bring your experiences and questions to the [Explorers Hub](https://discuss.newrelic.com) where our community members collaborate on solutions and new ideas.
-
->[Option 2 - thread in Community]
->New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects, there's a related Community topic in the New Relic Explorers Hub.
->You can find this project's topic/threads here: [URL for Community thread]
+We encourage you to bring your experiences and questions to the [Explorers Hub](https://discuss.newrelic.com) where our community members collaborate on solutions and new ideas.
 
 ## Contributing
 
@@ -49,6 +72,7 @@ If you believe you have found a security vulnerability in this project or any of
 
 ## License
 
-nri-snmp-trapd is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License.
+nri-snmp-trapd is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License. 
 
->[If applicable: nri-snmp-trapd also uses source code from third-party libraries. You can find full details on which libraries are used and the terms under which they are licensed in the third-party notices document.]
+nri-snmp-trapd also uses source code from third-party libraries. You can find full details on which libraries are used and the terms under which they are licensed in the third-party notices document.
+

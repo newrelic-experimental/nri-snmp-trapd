@@ -15,8 +15,8 @@ param (
 
 $integration = $(Split-Path -Leaf $PSScriptRoot)
 $integrationName = "snmp"
-$executable = "nri-snmp.exe"
-$version = "1.2.1"
+$executable = "nri-trapd.exe"
+$version = "1.0.0"
 
 # verifying version number format
 $v = $version.Split(".")
