@@ -13,6 +13,9 @@ collect:
   # The key allows data to be inserted to your account in the New Relic service.
   insert_key: "<% = insights_insert_key>"
 
+  # ============================== NR DATA CENTER REGION ===============================
+  # You must specify the data center region associated with your New Relic account.
+  # This can be either US or EU.
   nr_region: EU
 
   # INSIGHTS HTTP CLIENT PROXY
