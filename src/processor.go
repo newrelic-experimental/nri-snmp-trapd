@@ -1,15 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net"
 
-	insights "github.com/newrelic/go-insights/client"
+	//insights "github.com/newrelic/go-insights/client"
+	"github.com/newrelic/newrelic-client-go/newrelic"
 	log "github.com/sirupsen/logrus"
 	"github.com/soniah/gosnmp"
 )
 
-func newProcessor(community string, defaultEventType string, defaultSNMPDevice string, client *insights.InsertClient) func(packet *gosnmp.SnmpPacket, addr *net.UDPAddr) {
+func newProcessor(community string, defaultEventType string, defaultSNMPDevice string, client *newrelic.NewRelic) func(packet *gosnmp.SnmpPacket, addr *net.UDPAddr) {
 	processTrap := func(packet *gosnmp.SnmpPacket, addr *net.UDPAddr) {
 		sourceIP := addr.IP.String()
 		if *verboseFlag {
@@ -66,9 +68,13 @@ func newProcessor(community string, defaultEventType string, defaultSNMPDevice s
 		if *verboseFlag {
 			log.Info(fmt.Sprintf("Adding event: %v", ms))
 		}
-		err := client.EnqueueEvent(ms)
+		/*err := client.EnqueueEvent(ms)
 		if err != nil {
 			log.Error("", err)
+		}*/
+		// Queueu a custom event.
+		if err := client.Events.EnqueueEvent(context.Background(), ms); err != nil {
+			log.Fatal("error posting custom event:", err)
 		}
 	}
 	return processTrap

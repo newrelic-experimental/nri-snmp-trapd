@@ -7,11 +7,7 @@ INTEGRATION  := trapd
 BINARY_NAME   = nri-$(INTEGRATION)
 GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
 GO_FILES     := ./src/
-GOTOOLS       = github.com/kardianos/govendor \
-		gopkg.in/alecthomas/gometalinter.v2 \
-		github.com/axw/gocov/gocov \
-		github.com/stretchr/testify/assert \
-		github.com/AlekSi/gocov-xml \
+
 
 all: build
 
@@ -35,7 +31,7 @@ deps: tools deps-only
 
 deps-only:
 	@echo "=== $(INTEGRATION) === [ deps ]: Installing package dependencies required by the project..."
-	@govendor sync
+	#@govendor sync
 
 validate: deps
 	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running gometalinter..."

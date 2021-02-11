@@ -11,7 +11,9 @@ import (
 	"strings"
 	"time"
 
-	insights "github.com/newrelic/go-insights/client"
+	//insights "github.com/newrelic/go-insights/client"
+
+	"github.com/newrelic/newrelic-client-go/newrelic"
 	log "github.com/sirupsen/logrus"
 	"github.com/soniah/gosnmp"
 	"gopkg.in/yaml.v2"
@@ -32,6 +34,7 @@ type Configuration struct {
 	Collect struct {
 		AccountID           string `yaml:"account_id"`
 		InsertKey           string `yaml:"insert_key"`
+		NRRegion            string `yaml:"nr_region"`
 		EventType           string `yaml:"event_type"`
 		SNMPDevice          string `yaml:"snmp_device"`
 		DropUnDeclaredTraps bool   `yaml:"drop_undeclared_traps"`
@@ -84,6 +87,7 @@ func main() {
 
 	insightAccountID := config.Collect.AccountID
 	insightInsertKey := config.Collect.InsertKey
+	nrRegion := config.Collect.NRRegion
 	defaultEventType := config.Collect.EventType
 	defaultSNMPDevice := config.Collect.SNMPDevice
 	dropUndeclaredTraps = config.Collect.DropUnDeclaredTraps
@@ -161,14 +165,31 @@ func main() {
 	}
 
 	// Initialize the insights client
-	client := insights.NewInsertClient(insightInsertKey, insightAccountID)
-	if validationErr := client.Validate(); validationErr != nil {
+	//client := insights.NewInsertClient(insightInsertKey, insightAccountID)
+	client, err := newrelic.New(
+		newrelic.ConfigInsightsInsertKey(insightInsertKey),
+		newrelic.ConfigRegion(nrRegion))
+	if err != nil {
+		log.Fatal("error initializing client:", err)
+	}
+	accountID, err := strconv.Atoi(insightAccountID)
+	if err != nil {
+		log.Fatal("environment variable NEW_RELIC_ACCOUNT_ID required")
+	}
+	//cfg := config.New()
+	//cfg.InsightsInsertKey = os.Getenv("NEW_RELIC_INSIGHTS_INSERT_KEY")
+
+	/*if validationErr := client.Validate(); validationErr != nil {
 		log.Error("error validating NewRelic connection properties", validationErr)
 		return
-	}
-	if startError := client.Start(); startError != nil {
+	}*/
+	/*if startError := client.Start(); startError != nil {
 		log.Error("error creating NewRelic connection", startError)
 		return
+	}*/
+	// Post a custom event.
+	if err := client.Events.BatchMode(context.Background(), accountID); err != nil {
+		log.Fatal("error starting batch mode:", err)
 	}
 	//TODO: defer client close
 
@@ -219,9 +240,9 @@ mainloop:
 	close(exitChannel)
 }
 
-func run(ctx context.Context, nrClient *insights.InsertClient, trapEventsChannel <-chan map[string]interface{}) error {
+func run(ctx context.Context, nrClient *newrelic.NewRelic, trapEventsChannel <-chan map[string]interface{}) error {
 	var err error
-	err = nrClient.Flush()
+	err = nrClient.Events.Flush()
 	if err != nil {
 		return err
 	}
