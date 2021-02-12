@@ -10,7 +10,7 @@ New Relic Integration for SNMP Traps is a service that listens for SNMP traps an
 * Copy config.yml.sample to config.yml and edit it to update the following properties
 	* account_id
 	* insert_key
-	* nr_region
+	* nr_region (specify either "EU" or "US" datacenter)
 	* http_proxy_host (uncomment and specify if using HTTP proxy)
 	* http_proxy_port (uncomment and specify if using HTTP proxy)
 	* event_type (default NRQL event_type, can be overriden in traps.yml)

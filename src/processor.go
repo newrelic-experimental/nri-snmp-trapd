@@ -6,7 +6,8 @@ import (
 	"net"
 
 	//insights "github.com/newrelic/go-insights/client"
-	"github.com/newrelic/newrelic-client-go/newrelic"
+	//"github.com/newrelic/newrelic-client-go/newrelic"
+	"github.com/harrykimpel/newrelic-client-go/newrelic" // using my newrelic-client-go until PR is merged
 	log "github.com/sirupsen/logrus"
 	"github.com/soniah/gosnmp"
 )
@@ -51,7 +52,12 @@ func newProcessor(community string, defaultEventType string, defaultSNMPDevice s
 			}
 		}
 		if trapOidLookupOk {
-			ms["eventType"] = trapOidDef.EventType
+			var msEventType string
+			msEventType = defaultEventType
+			if trapOidDef.EventType != "" {
+				msEventType = trapOidDef.EventType
+			}
+			ms["eventType"] = msEventType
 			ms["device"] = trapOidDef.Device
 			populateVariables(ms, packet, trapOidDef)
 		} else {
