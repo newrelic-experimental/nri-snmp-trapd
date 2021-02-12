@@ -13,7 +13,8 @@ import (
 
 	//insights "github.com/newrelic/go-insights/client"
 
-	"github.com/newrelic/newrelic-client-go/newrelic"
+	//"github.com/newrelic/newrelic-client-go/newrelic"
+	"github.com/harrykimpel/newrelic-client-go/newrelic"
 	log "github.com/sirupsen/logrus"
 	"github.com/soniah/gosnmp"
 	"gopkg.in/yaml.v2"
