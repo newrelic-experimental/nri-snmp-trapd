@@ -52,7 +52,12 @@ func newProcessor(community string, defaultEventType string, defaultSNMPDevice s
 			}
 		}
 		if trapOidLookupOk {
-			ms["eventType"] = trapOidDef.EventType
+			var msEventType string
+			msEventType = defaultEventType
+			if trapOidDef.EventType != "" {
+				msEventType = trapOidDef.EventType
+			}
+			ms["eventType"] = msEventType
 			ms["device"] = trapOidDef.Device
 			populateVariables(ms, packet, trapOidDef)
 		} else {
