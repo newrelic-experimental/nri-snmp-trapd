@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/newrelic/newrelic-client-go/newrelic"
+	"github.com/harrykimpel/newrelic-client-go/newrelic"
 	log "github.com/sirupsen/logrus"
 	"github.com/soniah/gosnmp"
 	"gopkg.in/yaml.v2"
@@ -167,6 +167,7 @@ func main() {
 	client, err := newrelic.New(
 		newrelic.ConfigInsightsInsertKey(insightInsertKey),
 		newrelic.ConfigRegion(nrRegion))
+	log.Info("NR insert key is " + insightInsertKey + ", region " + nrRegion)
 	if err != nil {
 		log.Fatal("error initializing client:", err)
 	}

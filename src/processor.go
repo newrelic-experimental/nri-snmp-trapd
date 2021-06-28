@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"strings"
 
-	"github.com/newrelic/newrelic-client-go/newrelic"
+	"github.com/harrykimpel/newrelic-client-go/newrelic"
 	log "github.com/sirupsen/logrus"
 	"github.com/soniah/gosnmp"
 )
@@ -25,6 +26,19 @@ func newProcessor(community string, defaultEventType string, defaultSNMPDevice s
 
 		ms := make(map[string]interface{})
 		ms["trapSource"] = sourceIP
+
+		//ipAddress := net.ParseIP(sourceIP)
+		lookupAddr, err := net.LookupAddr(sourceIP)
+		sourceHost := sourceIP
+		if err != nil {
+			log.Error("error LookupAddr "+sourceIP, err)
+		} else {
+			sourceHost = lookupAddr[0]
+		}
+		log.Info(fmt.Sprintf("Lookup Addr: %s\n", sourceHost))
+		ms["trapSourceFullHostname"] = sourceHost
+		shortSourceHost := strings.Split(sourceHost, ".")
+		ms["trapSourceShortHostname"] = shortSourceHost[0]
 
 		var trapOidDef *trap
 		trapOidLookupOk := false
@@ -47,7 +61,12 @@ func newProcessor(community string, defaultEventType string, defaultSNMPDevice s
 					log.Error(fmt.Sprintf("Unable to handle non string trap_oid type [%s=%T]", v.Name, trapOidValue))
 					return
 				}
+			} else {
+				if *verboseFlag {
+					log.Warn(fmt.Sprintf("v.Name: %s", v.Name))
+				}
 			}
+
 		}
 		if trapOidLookupOk {
 			var msEventType string
@@ -62,6 +81,10 @@ func newProcessor(community string, defaultEventType string, defaultSNMPDevice s
 			if dropUndeclaredTraps {
 				if *verboseFlag {
 					log.Warn(fmt.Sprintf("Ignoring trap: %v", packet))
+					//b := trapOidDef. .([]byte)
+					//t := packet gosnmp.Default.UnmarshalTrap(packet)
+					//errMsg := "Ignoring trap: version %s, ContextName %s, Error %s", packet.Version, packet.ContextName, packet.Error.String()
+					log.Warn(fmt.Sprintf("Ignoring trap: version %s, ContextName %s, Error %s", packet.Version, packet.ContextName, packet.Error.String()))
 				}
 				return
 			}
